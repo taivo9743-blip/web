@@ -1,2 +1,2 @@
 # web
-làm web chơi chơi 
+mình làm web này để có thể xem phim ,đọc truyện khi mất mạng 
