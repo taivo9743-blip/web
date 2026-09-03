@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Turbo YT NAS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/all.min.css">
+    <style>
+        /* Triệt tiêu thanh cuộn mặc định để nhìn cao cấp như app */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22c55e;
+        }
+        video::-webkit-media-controls-panel {
+            background-image: linear-gradient(to top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.4), transparent) !important;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-slate-100 min-h-screen font-sans flex flex-col">
+
+    <!-- THANH HEADER THEO PHONG CÁCH YOUTUBE -->
+    <header class="bg-slate-900/90 border-b border-white/5 sticky top-0 z-50 px-4 h-14 flex items-center justify-between backdrop-blur-md">
+        <div class="flex items-center space-x-4">
+            <a href="/?tab=phim" class="text-slate-400 hover:text-green-400 text-sm font-bold flex items-center gap-2 transition">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="hidden sm:inline">Trở về kho phim</span>
+            </a>
+        </div>
+    
+        <div class="flex items-center space-x-2 text-xs font-mono text-green-400 bg-slate-950 px-3 py-1.5 rounded-full border border-white/10 shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span>YT CINEMA LAYOUT v3.5</span>
+        </div>
+    </header>
+
+    <!-- BỐ CỤC CHÍNH CHIA 2 CỘT CHUẨN YOUTUBE -->
+    <main class="max-w-[1700px] w-full mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 flex-1">
+        
+        <!-- CỘT BÊN TRÁI: VIDEO CHÍNH VÀ THÔNG TIN (CHIẾM 70%) -->
+        <section class="flex-1 min-w-0">
+            <!-- Trình phát video bo góc cao cấp -->
+            <div class="w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 aspect-video relative group">
+                <video class="w-full h-full object-contain" controls autoplay preload="auto">
+                    <source src="/stream/{{ movie_path }}" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ thẻ video này.
+                </video>
+                <video id="globalMoviePlayer" class="w-full h-full object-contain" controls autoplay preload="auto">
+    <!-- Đổi từ /stream/ thành /stream-transcode/ -->
+    <source src="/stream-transcode/{{ movie_path }}" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ phát video này.
+</video>
+            </div>
+
+            <!-- Tiêu đề và thông tin tương tác giả lập giống hệt YT -->
+            <div class="mt-4">
+                <h1 class="text-base md:text-xl font-bold font-mono text-white tracking-tight leading-6 line-clamp-2">{{ title }}</h1>
+                
+                <div class="flex flex-wrap items-center justify-between gap-4 mt-4 pb-4 border-b border-white/5">
+                    <!-- Khu vực "Kênh" giả lập -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-green-500 to-emerald-600 flex items-center justify-center text-slate-950 font-black text-sm shadow">
+                            NAS
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-200">Turbo NAS Server</h3>
+                            <p class="text-[10px] text-slate-400 font-mono">Local Stream • Active</p>
+                        </div>
+                    </div>
+
+                    <!-- Các nút tương tác phong cách YouTube -->
+                    <div class="flex items-center space-x-2 text-xs">
+                        <button class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full font-bold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-thumbs-up"></i> <span>Thích</span>
+                        </button>
+                        <button class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full font-bold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-share"></i> <span>Chia sẻ</span>
+                        </button>
+                        <a href="/stream/{{ movie_path }}" target="_blank" class="bg-green-500 hover:bg-green-400 text-slate-950 px-4 py-2 rounded-full font-black flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-download"></i> <span>Tải về</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Hộp nội dung mô tả video dưới tiêu đề -->
+                <div class="mt-4 bg-slate-900/60 border border-white/5 p-4 rounded-xl text-xs text-slate-300 font-mono space-y-1">
+                    <p class="text-white font-bold">Thông số luồng phim:</p>
+                    <p class="text-slate-400">Đường dẫn tệp gốc: <span class="text-green-400">{{ movie_path }}</span></p>
+                    <p class="text-slate-400">Chất lượng giải mã: <span class="text-slate-200">1080p / Auto Bitrate</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CỘT BÊN PHẢI: DANH SÁCH VIDEO GỢI Ý (CHIẾM 30%) -->
+        <aside class="w-full lg:w-[400px] xl:w-[420px] flex-none">
+            <h2 class="text-xs font-bold uppercase text-slate-400 font-mono tracking-wider mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-play-next text-green-500"></i> Video Gợi Ý Tiếp Theo
+            </h2>
+            
+            <div class="space-y-3">
+                {% if recommendations %}
+                    {% for rec in recommendations %}
+                        <!-- Card video gợi ý nằm ngang giống hệt sidebar YT -->
+                        <a href="/watch/{{ rec.path }}" class="flex gap-3 bg-slate-900/30 border border-white/0 hover:border-white/5 hover:bg-slate-900/80 p-2 rounded-xl transition-all duration-200 group">
+                            <!-- Thumbnail thu nhỏ -->
+                            <div class="w-36 aspect-video bg-slate-950 rounded-lg overflow-hidden relative flex-none shadow-sm border border-white/5">
+                                <img src="{{ rec.thumb }}" onerror="this.src='https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300';" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                <span class="absolute bottom-1 right-1 bg-black/80 text-[9px] font-bold text-green-400 px-1 rounded font-mono">{{ rec.ext }}</span>
+                            </div>
+                            <!-- Tiêu đề text bên phải thumbnail -->
+                            <div class="flex flex-col justify-center min-w-0">
+                                <h4 class="text-xs font-bold text-slate-200 line-clamp-2 font-mono leading-relaxed group-hover:text-green-400 transition" title="{{ rec.name }}">
+                                    {{ rec.name }}
+                                </h4>
+                                <span class="text-[10px] text-slate-400 mt-1 font-mono">Turbo NAS Media</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center p-6 text-slate-500 font-mono text-xs border border-dashed border-white/5 rounded-xl">
+                        Không còn video nào khác trong kho lưu trữ...
+                    </div>
+                {% endif %}
+            </div>
+        </aside>
+
+    </main>
+
+    <footer class="w-full text-center py-4 border-t border-white/5 text-[10px] text-slate-600 font-mono">
+        Turbo NAS Streaming Hub Pro v3.5 • YouTube Layout Complete
+    </footer>
+</body>
+</html>
+
+</body>
+</html>
